@@ -1,0 +1,43 @@
+# core/config.yaml -- the one place retrieval and gating are configured.
+#
+# DEMO NOTE. This repository runs on a small SYNTHETIC corpus (data/). The
+# thresholds below are fitted on the demo's own tune split by
+# `python -m eval.fit_thresholds`, so that all four actions are reachable under
+# the default BM25 retriever. They describe this toy corpus and nothing else.
+
+retrieval:
+  method: bm25          # bm25 | embedding | hybrid
+  match_target: answer  # answer | question | both -- what the query is matched against
+  k: 5
+  embedding_model: null # provider:model, e.g. google:gemini-embedding-001
+                        # (key in GOOGLE_API_KEY, never here). null = no encoder.
+                        # PIN THE VERSION, never a floating alias: a re-run must
+                        # reproduce, and a provider that upgrades a model behind
+                        # an alias breaks that silently.
+  rerank: false         # true: an LLM reorders the first-stage pool (core/rerank.py)
+  rerank_model: null    # e.g. gemini-2.5-flash-lite
+  rerank_pool: 15
+
+thresholds:
+  # Scale-dependent: these are in BM25 score units. A cosine retriever needs
+  # its own fit (python -m eval.fit_thresholds --config <embedding config>).
+  top1_high: 14.7157        # at or above: confident
+  top1_low: 7.6312         # below: refuse
+  margin: 6.344           # top1 - top2 below this: the top documents compete
+
+attributes:
+  document_tags: true     # rule 4: the competing documents differ among
+                          # themselves (needs only the document tags)
+  query_extraction: false # rule 3: the query states an attribute that the top
+                          # document contradicts (needs the query vocabulary)
+
+gray_zone:
+  evidence_check: false   # between top1_low and top1_high the gate refuses
+                          # unless a yes/no sufficiency check says otherwise.
+                          # Not built in this demo.
+
+targets:
+  # Declared targets, not thresholds. Reported next to every result.
+  answer_coverage_floor: 0.70
+  answer_coverage_target: 0.85
+  gray_zone_share_cap: 0.25

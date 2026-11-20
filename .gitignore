@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# regenerable scorer output
+eval/out/
+
+# API key: read by core/env.py, never committed
+.env
+.env.*
+!.env.example
