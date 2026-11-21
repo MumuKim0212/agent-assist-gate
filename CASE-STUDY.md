@@ -172,12 +172,12 @@ Gemini 임베딩(`gemini-embedding-001`)이 holdout 1위 정답률 **37.8% → 5
 |---|---|
 | `core/` | 색인(BM25 / 임베딩 / 하이브리드), 검색, 게이트(`decide`), 임베딩·리랭크 연동, 질의 비식별 |
 | `eval/` | 채점기(`score.py`), 임계값 적합(`fit_thresholds.py`), 가상 평가셋(`manifest.jsonl`) |
-| `serve/` | 예시 질문 화면(`python -m serve.app`), 명령줄 질의(`python -m serve.ask "질문"`), 부서 안내 |
+| `serve/` | 순위 목록 화면(`python -m serve.app`, 게이트 없음)과 게이트 데모(`/answer`), 명령줄 질의(`python -m serve.ask "질문"`), 부서 안내 |
 | `data/` | 가상 코퍼스와 평가셋을 만드는 스크립트 |
 | `docs/` | 핵심 설계 결정 5건, 평가 방법, 사례(평가셋 오염) |
 | `knowledge/` | 가상 코퍼스(`docs.jsonl`, `data/build_corpus.py`가 생성) |
-| `api/` | Vercel 배포용 진입점(`index.py`). `serve.app`과 같은 화면을 서버리스 함수로 제공하며 BM25만 쓰므로 API 키와 외부 호출이 없다 |
+| `api/` | Vercel 배포용 진입점(`index.py`). `serve.app`과 같은 라우트(`dispatch`)를 서버리스 함수로 제공하며 BM25만 쓰므로 API 키와 외부 호출이 없다 |
 | `vercel.json` | 모든 요청을 `api/index.py`로 보내고, 함수에 `core/`·`serve/`·`knowledge/`를 포함시키는 배포 설정 |
 | `tests/` | 102개 테스트 |
 
-비공개 저장소에만 있고 이 데모에는 없는 것: 원본 정제 파이프라인, 릴리스 게이트, 근거 검사(판정기), 실제 평가 문항과 결정 기록 전체.
+비공개 저장소에만 있고 이 데모에는 없는 것: 원본 정제 파이프라인, 릴리스 게이트, 근거 검사(판정기), 실제 평가 문항과 결정 기록 전체. 화면은 순위 목록의 구조만 같게 만들었고, 문서 이미지·상담원 피드백(B4)·이벤트 기록은 없다.

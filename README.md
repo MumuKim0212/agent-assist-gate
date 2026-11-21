@@ -22,7 +22,7 @@
 ```
 pip install -r requirements.txt
 python -m pytest tests                          # 102개
-python -m serve.app                             # http://127.0.0.1:8000 - 예시 질문을 눌러 보는 화면
+python -m serve.app                             # http://127.0.0.1:8000 - 순위 목록 화면(게이트 없음). 게이트 데모는 /answer
 python -m serve.ask "사진 파일은 어떤 크기로 올려야 하나요"
 python -m serve.ask "회비 감면을 받을 수 있는 조건이 있나요"   # 거절 + 담당 부서
 python -m eval.score                            # 홀드아웃 채점 (docs/evaluation-method.md)
@@ -39,11 +39,11 @@ python -m eval.score                            # 홀드아웃 채점 (docs/eval
 |---|---|
 | `core/` | 색인(BM25 / 임베딩 / 하이브리드), 검색, 게이트, 임베딩·리랭크 연동, 질의 비식별 |
 | `eval/` | 채점기, 임계값 적합, 가상 평가셋 |
-| `serve/` | 예시 질문 화면(`app.py`), 명령줄 질의(`ask.py`), 부서 안내 |
+| `serve/` | 순위 목록 화면(`render.py`, 게이트 없음)과 서버(`app.py`), 게이트 데모(`gate_demo.py`, `/answer`), 명령줄 질의(`ask.py`), 부서 안내 |
 | `data/` | 가상 코퍼스와 평가셋 생성 스크립트 |
 | `docs/` | 핵심 설계 결정, 평가 방법, 평가셋 오염 사례 |
 | `knowledge/` | 가상 코퍼스(`docs.jsonl`, `data/build_corpus.py`가 생성) |
-| `api/`, `vercel.json` | Vercel 배포용 진입점과 설정. `serve.app`과 같은 화면을 서버리스 함수로 제공하며 BM25만 쓰므로 API 키가 필요 없다 |
+| `api/`, `vercel.json` | Vercel 배포용 진입점과 설정. `serve.app`과 같은 라우트(`dispatch`)를 서버리스 함수로 제공하며 BM25만 쓰므로 API 키가 필요 없다 |
 | `tests/` | 102개 테스트 |
 
 ## 읽는 순서
@@ -55,4 +55,4 @@ python -m eval.score                            # 홀드아웃 채점 (docs/eval
 
 ## 이 데모에 없는 것
 
-원본 정제 파이프라인, 릴리스 게이트, 근거 검사(LLM 판정기), 실제 평가 문항.
+원본 정제 파이프라인, 릴리스 게이트, 근거 검사(LLM 판정기), 실제 평가 문항. 화면은 순위 목록의 구조(순위 목록, 문서, 키보드, "확인 필요" 표시, "여기 없음", 최근 문서, 담당 부서 안내)만 같게 만들었고, 문서 이미지, 상담원 피드백("이거 틀림"), 이벤트 기록은 없다.

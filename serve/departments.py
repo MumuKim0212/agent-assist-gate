@@ -74,6 +74,31 @@ def _matches(query, terms):
     return bool(terms) and all(term.upper() in query for term in terms)
 
 
+def search(teams, query):
+    """The browse page's filter: `table(doc)` narrowed to what the agent typed.
+
+    Unlike `lookup`, this is for a person reading a list, so it is permissive: a
+    topic row stays when every word typed appears in the team's name plus that
+    topic, and a team whose own name matches keeps all its topics. Spacing is
+    ignored, as in `lookup`. An empty query returns everything.
+    """
+    words = ["".join(w.split()).upper() for w in query.split()]
+    words = [w for w in words if w]
+    if not words:
+        return teams
+    out = {}
+    for team, topics in teams.items():
+        squeezed_team = "".join(team.split()).upper()
+        if all(w in squeezed_team for w in words):
+            out[team] = list(topics)
+            continue
+        kept = [t for t in topics
+                if all(w in "".join((team + " " + t).split()).upper() for w in words)]
+        if kept:
+            out[team] = kept
+    return out
+
+
 def lookup(query, doc):
     """query -> 팀명, or None when the table does not clearly own the question."""
     squeezed = "".join(query.split()).upper()
