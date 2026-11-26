@@ -21,7 +21,7 @@
 
 ```
 pip install -r requirements.txt
-python -m pytest tests                          # 102개
+python -m pytest tests                          # 137개
 python -m serve.app                             # http://127.0.0.1:8000 - 순위 목록 화면(게이트 없음). 게이트 데모는 /answer
 python -m serve.ask "사진 파일은 어떤 크기로 올려야 하나요"
 python -m serve.ask "회비 감면을 받을 수 있는 조건이 있나요"   # 거절 + 담당 부서
@@ -44,7 +44,7 @@ python -m eval.score                            # 홀드아웃 채점 (docs/eval
 | `docs/` | 핵심 설계 결정, 평가 방법, 평가셋 오염 사례 |
 | `knowledge/` | 가상 코퍼스(`docs.jsonl`, `data/build_corpus.py`가 생성) |
 | `api/`, `vercel.json` | Vercel 배포용 진입점과 설정. `serve.app`과 같은 라우트(`dispatch`)를 서버리스 함수로 제공하며 BM25만 쓰므로 API 키가 필요 없다 |
-| `tests/` | 102개 테스트 |
+| `tests/` | 137개 테스트 |
 
 ## 읽는 순서
 
